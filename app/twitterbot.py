@@ -4,7 +4,7 @@ from celery import Celery
 from celery import Task
 
 from scraper import Scraper
-from models import Tweet
+from app.models import Tweet
 from app.main import db_session, twitter_api
 
 
@@ -24,10 +24,10 @@ def scrape():
 
 @app.task(base=SqlAlchemyTask)
 def tweet():
-    tweet = db_session.query(Tweet).filter_by(posted=None).first()
-    if tweet is not None:
-        tweet.post_to_twitter(twitter_api)
-        tweet.posted = datetime.now()
+    msg = db_session.query(Tweet).filter_by(posted=None).first()
+    if msg is not None:
+        msg.post_to_twitter(twitter_api)
+        msg.posted = datetime.now()
         db_session.commit()
     else:
         scrape().delay()

@@ -31,7 +31,7 @@ class Scraper():
         return soup.select('.nextprev a')[-1]['href']
 
     def _end_of_soup(self, soup):
-        return 'prev' in soup.select('.nextprev a')[-1].text
+        return not soup.select('.nextprev a') or 'prev' in soup.select('.nextprev a')[-1].text
 
     def _parse_page(self, soup):
         links = []

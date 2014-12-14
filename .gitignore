@@ -1,3 +1,4 @@
 *.pyc
-temp.jpg
+app/temp.jpg
 *.db
+.idea
