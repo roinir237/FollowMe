@@ -1,9 +1,12 @@
 import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-from config import app_config
 import twitter
+
+from config import app_config
+
 
 db_engine = create_engine(app_config.SQLALCHEMY_DATABASE_URI, echo=app_config.DEBUG)
 db_session = scoped_session(sessionmaker(bind=db_engine))

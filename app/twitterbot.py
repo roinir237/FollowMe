@@ -1,9 +1,12 @@
-from scraper import Scraper
-from models import Tweet
 from datetime import datetime
+
 from celery import Celery
 from celery import Task
-from main import db_session, twitter_api
+
+from scraper import Scraper
+from models import Tweet
+from app.main import db_session, twitter_api
+
 
 app = Celery("twitterbot")
 app.config_from_envvar('CELERY_CONFIG_MODULE')

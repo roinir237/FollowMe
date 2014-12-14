@@ -1,7 +1,9 @@
 from __future__ import with_statement
+
 from bs4 import BeautifulSoup
-from models import Tweet
 import requests
+
+from app.models import Tweet
 
 
 class Scraper():
