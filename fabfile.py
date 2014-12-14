@@ -1,5 +1,7 @@
 from __future__ import with_statement
 from fabric.api import env, abort, settings, run, cd
+from fabric.contrib.files import exists
+
 
 env.hosts = ['root@karmapleaseapp.com']
 
@@ -10,6 +12,6 @@ def deploy():
             run("git clone git@github.com:roinir237/FollowMe.git %s" % code_dir)
     with cd(code_dir):
         run("git pull")
-        if run("test -d requirements.txt").failed:
+        if not exists("requirements.txt"):
             abort("No requirements.txt file found.")
         run("pip install -r requirements.txt")
