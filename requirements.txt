@@ -15,7 +15,6 @@ flower==0.7.3
 kombu==3.0.24
 oauthlib==0.7.2
 paramiko==1.15.1
-psycopg2==2.5.4
 pycrypto==2.6.1
 python-twitter==2.0
 pytz==2014.10
