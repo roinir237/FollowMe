@@ -3,7 +3,7 @@ from datetime import datetime
 from celery import Celery
 from celery import Task
 
-from scraper import Scraper
+from app.scraper import Scraper
 from app.models import Tweet
 from app.main import db_session, twitter_api
 
@@ -30,5 +30,5 @@ def tweet():
         msg.posted = datetime.now()
         db_session.commit()
     else:
-        scrape().delay()
+        scrape()
 
