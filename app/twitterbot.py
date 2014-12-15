@@ -16,7 +16,6 @@ class SqlAlchemyTask(Task):
 
     def after_return(self, status, retval, task_id, args, kwargs, einfo):
         pass
-        # db_session.remove()
 
 
 @app.task(base=SqlAlchemyTask)
