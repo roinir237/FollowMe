@@ -15,7 +15,8 @@ class SqlAlchemyTask(Task):
     abstract = True
 
     def after_return(self, status, retval, task_id, args, kwargs, einfo):
-        db_session.remove()
+        pass
+        # db_session.remove()
 
 
 @app.task(base=SqlAlchemyTask)
@@ -30,5 +31,5 @@ def tweet():
         msg.posted = datetime.now()
         db_session.commit()
     else:
-        scrape()
+        scrape().delay()
 
