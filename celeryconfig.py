@@ -12,7 +12,11 @@ CELERY_ENABLE_UTC = True
 
 CELERYBEAT_SCHEDULE = {
     'tweet-every-1-hours': {
-        'task': 'app.twitterbot.tweet',
+        'task': 'app.twitterbot.post_tweet',
         'schedule': timedelta(hours=1)
     },
+    'follow-every-15-minutes': {
+        'task': 'app.twitterbot.follow_based_on_last_tweet',
+        'schedule': timedelta(minutes=1)
+    }
 }
