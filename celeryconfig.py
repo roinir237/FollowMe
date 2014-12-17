@@ -15,8 +15,8 @@ CELERYBEAT_SCHEDULE = {
         'task': 'app.twitterbot.post_tweet',
         'schedule': timedelta(hours=1)
     },
-    'follow-every-15-minutes': {
+    'follow-every-20-minutes': {
         'task': 'app.twitterbot.follow_based_on_last_tweet',
-        'schedule': timedelta(minutes=15)
+        'schedule': timedelta(minutes=20)
     }
 }
