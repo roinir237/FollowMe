@@ -39,7 +39,9 @@ def scrape():
 def post_tweet():
     msg = db_session.query(Tweet).filter_by(posted=None).first()
     if msg is not None:
-        msg.post_to_twitter(twitter_api)
+        try:
+            msg.post_to_twitter(twitter_api)
+        except: pass
         msg.posted = datetime.now()
         db_session.commit()
     else:
