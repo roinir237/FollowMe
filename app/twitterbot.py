@@ -2,23 +2,24 @@ from datetime import datetime
 import re
 
 from celery import Celery
-from celery import Task
-
 from app.scraper import Scraper
 from app.models import Tweet
 from app.main import db_session, twitter_api
-
+import random
 
 app = Celery("twitterbot")
 app.config_from_envvar('CELERY_CONFIG_MODULE')
 
-class SqlAlchemyTask(Task):
-    abstract = True
+@app.task()
+def manage_followers():
+    friends_ids = twitter_api.GetFriendIDs()
+    if len(friends_ids) >= 2000:
+        [unfollow.delay(friend_id) for friend_id in random.sample(friends_ids, 200)]
+    else:
+        follow_based_on_last_tweet.delay()
 
-    def after_return(self, status, retval, task_id, args, kwargs, einfo):
-        pass
 
-@app.task(base=SqlAlchemyTask)
+@app.task()
 def follow_based_on_last_tweet():
     tweet = db_session.query(Tweet).filter(Tweet.posted!=None).order_by(Tweet.posted.desc()).first()
     try:
@@ -31,11 +32,18 @@ def follow_based_on_last_tweet():
         pass
 
 
-@app.task(base=SqlAlchemyTask)
+@app.task(bind=True, default_retry_delay=30 * 60, max_retries=4)
+def unfollow(self, friend_id):
+    try:
+        twitter_api.DestroyFriendship(user_id=friend_id)
+    except:
+        self.retry()
+
+@app.task()
 def scrape():
     Scraper().fetch_and_persist(db_session)
 
-@app.task(base=SqlAlchemyTask)
+@app.task()
 def post_tweet():
     msg = db_session.query(Tweet).filter_by(posted=None).first()
     if msg is not None:
